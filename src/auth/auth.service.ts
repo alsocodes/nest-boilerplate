@@ -32,33 +32,33 @@ export class AuthService {
       throw new UnauthorizedException('Wrong email or password');
     }
 
-    const access_token = await this.createAccessToken(user);
-    const refresh_token = await this.createRefreshToken(user);
+    const accessToken = await this.createAccessToken(user);
+    const refreshToken = await this.createRefreshToken(user);
 
-    return { access_token, refresh_token } as LoginResponse;
+    return { accessToken, refreshToken } as LoginResponse;
   }
 
   async refreshAccessToken(
     refreshTokenDto: RefreshAccessTokenDto,
-  ): Promise<{ access_token: string }> {
-    const { refresh_token } = refreshTokenDto;
-    const payload = await this.decodeToken(refresh_token);
-    const refreshToken = await this.refreshTokenRepository.findOne(
+  ): Promise<{ accessToken: string }> {
+    const { refreshToken } = refreshTokenDto;
+    const payload = await this.decodeToken(refreshToken);
+    const refreshTokenFind = await this.refreshTokenRepository.findOne(
       payload.jid,
       { relations: ['user'] },
     );
 
-    if (!refreshToken) {
+    if (!refreshTokenFind) {
       throw new UnauthorizedException('Refresh token is not found');
     }
 
-    if (refreshToken.isRevoked) {
+    if (refreshTokenFind.isRevoked) {
       throw new UnauthorizedException('Refresh token has beed revoked');
     }
 
-    const access_token = await this.createAccessToken(refreshToken.user);
+    const accessToken = await this.createAccessToken(refreshTokenFind.user);
 
-    return { access_token };
+    return { accessToken };
   }
 
   async decodeToken(token: string): Promise<any> {
@@ -77,23 +77,24 @@ export class AuthService {
     const payload = {
       sub: user.id,
     };
-    const access_token = await this.jwtService.signAsync(payload);
-    return access_token;
+    const accessToken = await this.jwtService.signAsync(payload);
+    return accessToken;
   }
 
   async createRefreshToken(user: User): Promise<string> {
-    const refreshToken = await this.refreshTokenRepository.createRefreshToken(
-      user,
-      +refreshTokenConfig.expiresIn,
-    );
+    const refreshTokenCreate =
+      await this.refreshTokenRepository.createRefreshToken(
+        user,
+        +refreshTokenConfig.expiresIn,
+      );
     const payload = {
-      jid: refreshToken.id,
+      jid: refreshTokenCreate.id,
     };
-    const refresh_token = await this.jwtService.signAsync(
+    const refreshToken = await this.jwtService.signAsync(
       payload,
       refreshTokenConfig,
     );
-    return refresh_token;
+    return refreshToken;
   }
 
   async revokeRefreshToken(id: string): Promise<void> {

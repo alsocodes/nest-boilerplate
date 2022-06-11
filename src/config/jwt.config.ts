@@ -3,7 +3,7 @@ import { JwtModuleOptions, JwtSignOptions } from '@nestjs/jwt';
 export const jwtConfig: JwtModuleOptions = {
   secret: 'koderahasia',
   signOptions: {
-    expiresIn: 60,
+    expiresIn: 60 * 60,
   },
 };
 

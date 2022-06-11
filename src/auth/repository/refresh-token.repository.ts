@@ -9,7 +9,7 @@ export class RefreshTokenRepository extends Repository<RefreshToken> {
     refreshToken.user = user;
     refreshToken.isRevoked = false;
     const expiredAt = new Date();
-    expiredAt.setTime(expiredAt.getTime() + ttl);
+    expiredAt.setTime(expiredAt.getTime() + ttl * 1000);
     refreshToken.expiredAt = expiredAt;
 
     return await refreshToken.save();

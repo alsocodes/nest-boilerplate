@@ -1,4 +1,4 @@
-import { Type } from 'class-transformer';
+import { Transform, Type } from 'class-transformer';
 import {
   IsBoolean,
   IsEmail,
@@ -30,5 +30,8 @@ export class QueryUserDto {
 
   @IsOptional()
   @IsBoolean()
+  @Transform(({ obj }) => {
+    return [true, 'enabled', 'true'].indexOf(obj.isAnnotate) > -1;
+  })
   isActive: string;
 }

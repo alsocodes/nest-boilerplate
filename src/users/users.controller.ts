@@ -8,19 +8,27 @@ import {
   Post,
   Put,
   Query,
-  UsePipes,
-  ValidationPipe,
+  UseGuards,
 } from '@nestjs/common';
+import {
+  ApiOkResponse,
+  ApiResponse,
+  ApiSecurity,
+  ApiTags,
+} from '@nestjs/swagger';
 import { DefaultResponse } from 'src/default-response.interface';
+import { JwtGuard } from 'src/guard/jwt.guard';
 import { UUIDValidationPipe } from 'src/pipes/uuid-validation.pipe';
 import { CreateUserDto } from './dto/create-user.dto';
 import { PatchUserStatusDto } from './dto/patch-user-status.dto';
 import { QueryUserDto } from './dto/query-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
-import { UserResultOneInterface } from './interface/user-result-one.interface';
 import { UsersService } from './users.service';
 
+@ApiTags('User')
+@ApiSecurity('bearer')
 @Controller('user')
+@UseGuards(JwtGuard)
 export class UsersController {
   constructor(private readonly usersService: UsersService) {}
 
