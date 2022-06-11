@@ -12,13 +12,13 @@ import * as bcrypt from 'bcrypt';
 import { RefreshToken } from 'src/auth/entity/refresh-token.entity';
 import { Book } from 'src/books/entity/book.entity';
 
-@Entity()
+@Entity({ name: 'users' })
 export class User extends BaseEntity {
   @PrimaryGeneratedColumn('uuid')
   id: string;
 
   @Column()
-  name: string;
+  name!: string;
 
   @Column({ unique: true })
   email: string;
@@ -28,6 +28,9 @@ export class User extends BaseEntity {
 
   @Column()
   salt: string;
+
+  @Column({ default: true })
+  isActive: boolean;
 
   @CreateDateColumn()
   createdAt!: Date;
