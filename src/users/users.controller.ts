@@ -10,12 +10,7 @@ import {
   Query,
   UseGuards,
 } from '@nestjs/common';
-import {
-  ApiOkResponse,
-  ApiResponse,
-  ApiSecurity,
-  ApiTags,
-} from '@nestjs/swagger';
+import { ApiSecurity, ApiTags } from '@nestjs/swagger';
 import { DefaultResponse } from 'src/default-response.interface';
 import { JwtGuard } from 'src/guard/jwt.guard';
 import { UUIDValidationPipe } from 'src/pipes/uuid-validation.pipe';
