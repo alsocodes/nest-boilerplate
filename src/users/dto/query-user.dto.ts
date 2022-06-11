@@ -3,7 +3,6 @@ import {
   IsBoolean,
   IsEmail,
   IsInt,
-  IsObject,
   IsOptional,
   IsString,
 } from 'class-validator';
@@ -11,11 +10,11 @@ import {
 export class QueryUserDto {
   @IsInt()
   @Type(() => Number)
-  page: number = 1;
+  page = 1;
 
   @IsInt()
   @Type(() => Number)
-  perPage: number = 20;
+  perPage = 20;
 
   @IsOptional()
   @IsString()
